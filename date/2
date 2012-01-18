@@ -1,0 +1,23 @@
+
+	int dqc, dcent, dquad, leapadj;
+	double wjd,depoch, quadricent, cent, quad,yindex, yearday;
+
+	wjd = (int)(mod_julian_day() +2400000) + 0.5;
+	depoch = wjd - 1721425.5;
+	quadricent = floor(depoch / 146097);
+	dqc = (((int)depoch) % 146097);
+	cent = (int)(dqc / 36524);
+	dcent = (dqc %36524);
+	quad = (int)(dcent / 1461);
+	dquad = (dcent % 1461);
+	yindex = (int)(dquad / 365);
+	currentYear = int((quadricent * 400) + (cent * 100) + (quad * 4) + yindex);
+	if (!((cent == 4) || (yindex == 4))) {
+		(currentYear)++;
+	}
+	yearday = wjd - gregorianDateToJDN(currentYear, 1, 1);
+	leapadj = ((wjd < gregorianDateToJDN(currentYear, 3, 1)) ? 0
+			:
+	(isLeapYear(currentYear) ? 1 : 2));
+	currentMonth = int(floor((((yearday + leapadj) * 12) + 373) / 367));
+	currentDay = int((wjd - gregorianDateToJDN(currentYear, currentMonth, 1)) + 1);

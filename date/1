@@ -1,0 +1,29 @@
+	day_month_year result;
+	int dqc, dcent, dquad, leapadj;
+	int day, month, year;
+	double wjd,depoch, quadricent, cent, quad,yindex, yearday;
+
+	wjd = (int)(jd) + 0.5;
+	depoch = wjd - 1721425.5;
+	quadricent = floor(depoch / 146097);
+	dqc = (((int)depoch) % 146097);
+	cent = (int)(dqc / 36524);
+	dcent = (dqc %36524);
+	quad = (int)(dcent / 1461);
+	dquad = (dcent % 1461);
+	yindex = (int)(dquad / 365);
+	year = int((quadricent * 400) + (cent * 100) + (quad * 4) + yindex);
+	if (!((cent == 4) || (yindex == 4))) {
+		(year)++;
+	}
+	yearday = wjd - gregorian_date_to_JDN(year, 1, 1);
+	leapadj = ((wjd < gregorian_date_to_JDN(year, 3, 1)) ? 0
+			:
+	(is_leap_year(year) ? 1 : 2));
+	month = int(floor((((yearday + leapadj) * 12) + 373) / 367));
+	day   = int((wjd - gregorian_date_to_JDN(year, month, 1)) + 1);
+
+	result.day = day;
+	result.month = month;
+	result.year = year;
+	return result;
