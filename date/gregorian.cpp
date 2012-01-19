@@ -70,7 +70,7 @@ Gregorian::Gregorian(int year, int month, int day)
 
 	int Gregorian::mod_julian_day() const
 {
-	return int(julian_day_number - 2400000);
+	return (int)(julian_day_number - 2400000.5);
 }
 
 	int Gregorian::julian_day() const
@@ -78,19 +78,62 @@ Gregorian::Gregorian(int year, int month, int day)
 	return julian_day_number;
 }
 
-	int Gregorian::gregorian_date_to_JDN(int y, int m, int d) const
+int Gregorian::gregorian_date_to_JDN(int y, int m, int d) const
 {
-	std::cout << "\n$$$$ year:" << y << " month:" << m << " day:" << d;
-	int jdn = (1721425.5 - 1) + (365 * (y - 1)) +
-	(int)((y - 1) / 4) + (-(int)((y - 1) / 100)) +
-	(int)((y - 1) / 400) + (int)((((367 * m) - 362) / 12) +
-	((m <= 2) ? 0 :	(is_leap_year(y) ? -1 : -2)) + d);
-	std::cout << " $$$$ jdn:" << jdn << "\n";
+	//std::cout << "\n$$$$ year:" << y << " month:" << m << " day:" << d;
+	if(m > 2)
+	{
+	    m = m - 3;
+	}else
+	{
+	    m = m + 9 ; y = y - 1;
+	}
+
+	int ya = y % 100;
+	int c = y / 100;
+
+	c = y / 100 ; ya = y - 100 * c ;
+	int jdn = (146097 * c) / 4 + (1461 * ya) / 4 + (153 * m + 2) / 5 + d + 1721119;
+	//std::cout << " $$$$ jdn:" << jdn << "\n";
 	return jdn;
 }
 
 	day_month_year Gregorian::JDN_to_gregorian(int jd) const
 {
+	//std::cout << " $$$$ jdn: " << jd;
+
+	day_month_year result;
+	int j, y, m, d;
+
+	j = jd - 1721119 ;
+	y = (4 * j - 1) / 146097 ;
+	j = 4 * j - 1 - 146097 * y ;
+	d = j / 4 ;
+	j = (4 * d + 3) / 1461 ;
+	d = 4 * d + 3 - 1461 * j ;
+	d = (d + 4) / 4 ;
+	m = (5 * d - 3) / 153 ;
+	d = 5 * d - 3 - 153 * m ;
+	d = (d + 5) / 5 ;
+	y = 100 * y + j ;
+	if(m < 10)
+	{
+		m = m + 3;
+	}else
+	{
+		m = m - 9 ; y = y + 1;
+	}
+
+	result.day = d;
+	result.month = m;
+	result.year = y;
+	//std::cout << " year:" << y << " month:" << m << " day:" << d << "\n";
+	return result;
+}
+/*
+	day_month_year Gregorian::JDN_to_gregorian(int jd) const
+{
+	std::cout << " $$$$ jdn: " << jd;
 	day_month_year result;
 	int dqc, dcent, dquad, leapadj;
 	int day, month, year;
@@ -119,8 +162,10 @@ Gregorian::Gregorian(int year, int month, int day)
 	result.day = day;
 	result.month = month;
 	result.year = year;
+	std::cout << " year:" << year << " month:" << month << " day:" << day << "\n";
 	return result;
 }
+*/
 /*
 	day_month_year Gregorian::JDN_to_gregorian(int jd) const
 {
@@ -397,9 +442,9 @@ Gregorian& Gregorian::operator=(const Date& d)
 
 	bool Gregorian::is_leap_year(int year) const
 {
-	if(julian_day_number % 4 == 0)
-		if(julian_day_number % 100 == 0)
-			if(julian_day_number % 400 == 0)
+	if(year % 4 == 0)
+		if(year % 100 == 0)
+			if(year % 400 == 0)
 				return true;
 			else
 				return false;

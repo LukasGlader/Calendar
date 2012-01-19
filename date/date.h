@@ -45,7 +45,7 @@ public:
 
 protected:
 	//state
-	unsigned int julian_day_number;
+	int julian_day_number;
 };
 std::ostream& operator<<(std::ostream & os, const Date& d);
 

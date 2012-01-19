@@ -61,28 +61,32 @@ int main(){
 	std::cout << "          JDN: " << j.mod_julian_day() << std::endl;
 	std::cout << "\n\n";
 	*/
+	std::cout << "--------------------------------------------------------------------------------\n";
+	std::cout << "--------------------------------------------------------------------------------\n";
+	std::cout << "--------------------------------------------------------------------------------\n";
+	std::cout << "--------------------------------------------------------------------------------\n";
 	g = Gregorian(1923, 3, 1);
 	//g.add_year(111);
-	g.add_month(120);
+	//g.add_month(-120);
 	//g.add_month(-119);
-	//g.add_year(-111);
-//	j = Julian(1900, 2, 29);
+	g.add_year(-10);
+//	j = Julian(1900, , 29);
 	std::cout << "--------------------------------------------------------------------------------\n";
 	std::cout << "Test 4 - Date: 1923-3-1: Thursday\n";
 	std::cout << "\n";
 
-	std::cout << "Gregor - Date: " << g.year() << "-" << g.month() << "-" << g.day()  << ": " << g.week_day_name() << std::endl;
+	std::cout << "Gregor - Date: " << g << ": " << g.week_day_name() << std::endl;
 	std::cout << "Actual    JDN: " << g.mod_julian_day() << std::endl;
 	std::cout << "Expected  JDN: " << "23479" << std::endl;
 	std::cout << "\n";
 
-	g = Gregorian(1859, 11, 16);
+	g = Gregorian(1992, 9, 22);
 //	j = Julian(1900, 2, 29);
 	std::cout << "--------------------------------------------------------------------------------\n";
-	std::cout << "Test 5 - Date: 1859-11-16\n";
+	std::cout << "Test 5 - Date: 1992-09-22\n";
 	std::cout << "\n";
 
-	std::cout << "Gregor - Date: " << g.year() << "-" << g.month() << "-" << g.day()  << ": " << g.week_day_name() << std::endl;
+	std::cout << "Gregor - Date: " << g << ": " << g.week_day_name() << std::endl;
 	std::cout << "Actual    JDN: " << g.mod_julian_day() << std::endl;
 	std::cout << "Expected  JDN: " << "-1" << std::endl;
 	std::cout << "\n";
