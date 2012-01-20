@@ -13,7 +13,7 @@ namespace lab2
 {
 
 class Julian :
-	public Gregorian
+	public lab2::Gregorian
 {
 
 public:
@@ -28,16 +28,13 @@ public:
 	const int year() const;
 
 	virtual Date& add_year(int n);
-	virtual Date& add_year();
-	virtual Date& add_month(int n);
+	//virtual Date& add_month(int n);
 	virtual Date& add_month();
 	virtual Date& sub_month();
 protected:
 
 	virtual bool is_leap_year(int year) const;
-	bool is_leap_day() const;
 
-	int days_in_month(int year, int month) const;
 	//int calculateDaysNextMonth();
 
 	//void jdnToG_Regorian(int jdn);

@@ -28,34 +28,29 @@ Julian::Julian(int year, int month, int day)
 
 double Julian::julian_date_to_JDN(int y, int m, int d) const
 {
-	return 0;
+	if(y < 1 ){
+		y++;
+	}
+	if( m <= 2 ){
+		y--;
+		m += 12;
+	}
+	return ((floor((365.25)*(y+4716)) +
+			floor(30.6001*(m+1))+d)-1524.5);
+
 }
 
 	day_month_year Julian::JDN_to_julian(double jd) const
 {
-
 	day_month_year result;
-	int y, m, d;
-	double j;
 
-	j = jd - 1721119 + 0.5 ;
-	y = (int)((4 * j - 1) / 146097 );
-	j = 4 * j - 1 - 146097 * y ;
-	d = (int)(j / 4) ;
-	j = (4 * d + 3) / 1461 ;
-	d = 4 * d + 3 - 1461 * j ;
-	d = (d + 4) / 4 ;
-	m = (5 * d - 3) / 153 ;
-	d = 5 * d - 3 - 153 * m ;
-	d = (d + 5) / 5 ;
-	y = 100 * y + j ;
-	if(m < 10)
-	{
-		m = m + 3;
-	}else
-	{
-		m = m - 9 ; y = y + 1;
-	}
+	int b = mod_julian_day() + 2401525;
+	int c = (int)((b - 122.1) / 365.25);
+	int da = (int)(365.25 * c);
+	int e = (int)((b - da) / 30.6001);
+	int m =(int)( (e < 14) ? (e - 1) : (e - 13) );
+	int y = (int)( (m > 2 ) ? (c - 4716) : (c - 4715));
+	int d = (int)(b-da-floor(30.6001*e));
 
 	result.day = d;
 	result.month = m;

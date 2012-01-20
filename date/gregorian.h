@@ -57,8 +57,8 @@ public:
 	virtual Gregorian& operator=(const Date& d);
 
 	virtual Date& add_year(int n);
-	virtual Date& add_year();
-	virtual Date& add_month(int n);
+	Date& add_year();
+	Date& add_month(int n);
 	virtual Date& add_month();
 	virtual Date& sub_month();
 protected:
@@ -66,7 +66,7 @@ protected:
 	virtual bool is_leap_year(int year) const;
 	bool is_leap_day() const;
 
-	int days_in_month(int year, int month) const;
+	virtual int days_in_month(int year, int month) const;
 	//int calculateDaysNextMonth();
 
 	//void jdnToG_Regorian(int jdn);
