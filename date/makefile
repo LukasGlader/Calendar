@@ -1,4 +1,4 @@
 ALL:
-	g++ -g -Wall date.cpp gregorian.cpp kattistime.cpp cprog09lab22b.cpp
-	#g++ -g -Wall date.cpp gregorian.cpp kattistime.cpp test_code.cpp
+	#g++ -g -O2 -static -std=gnu++0x date.cpp gregorian.cpp kattistime.cpp cprog09lab22b.cpp
+	g++ -g -Wall date.cpp julian.cpp kattistime.cpp test_code.cpp
 

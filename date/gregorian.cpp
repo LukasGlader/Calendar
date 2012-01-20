@@ -33,19 +33,10 @@ namespace lab2{
 
 Gregorian::Gregorian()
 {
-	// För att få nuvarande tid
-    time_t mytime = time(NULL);
-	set_k_time(mytime);
-    k_time(&mytime);
 
-    // För att få ut datum lokalt 
-    struct tm *t = gmtime(&mytime);
-    int current_year  = t->tm_year + 1900;
-    int current_month = t->tm_mon + 1;      // månaderna och dagarna
-    int current_day   = t->tm_mday;         // indexerade från ETT
-
-	julian_day_number = gregorian_date_to_JDN(current_year, current_month, current_day);
-
+	time_t t;
+	k_time(&t);	//time(t);
+	julian_day_number = (t/86400)+ 2440587.5;
 }
 
 Gregorian::Gregorian(const Date& d)
@@ -70,45 +61,45 @@ Gregorian::Gregorian(int year, int month, int day)
 
 	int Gregorian::mod_julian_day() const
 {
-	return (int)(julian_day_number - 2400000.5);
+	return (int)JDN_to_mod_julian_day(julian_day_number);
 }
 
-	int Gregorian::julian_day() const
+	double Gregorian::JDN_to_mod_julian_day(double jdn) const
+{
+	return (jdn - 2400000.5);
+}
+
+	double Gregorian::julian_day() const
 {
 	return julian_day_number;
 }
 
-int Gregorian::gregorian_date_to_JDN(int y, int m, int d) const
+double Gregorian::gregorian_date_to_JDN(int y, int m, int d) const
 {
-	//std::cout << "\n$$$$ year:" << y << " month:" << m << " day:" << d;
-	if(m > 2)
-	{
-	    m = m - 3;
-	}else
-	{
-	    m = m + 9 ; y = y - 1;
-	}
-
-	int ya = y % 100;
-	int c = y / 100;
-
-	c = y / 100 ; ya = y - 100 * c ;
-	int jdn = (146097 * c) / 4 + (1461 * ya) / 4 + (153 * m + 2) / 5 + d + 1721119;
-	//std::cout << " $$$$ jdn:" << jdn << "\n";
-	return jdn;
+	return (1721425.5 - 1) +
+	(365 * (y - 1)) +
+	(int)((y - 1) / 4) +
+	(-(int)((y - 1) / 100)) +
+	(int)((y - 1) / 400) +
+	(int)((((367 * m) - 362) / 12) +
+			((m <= 2) ? 0 :
+			(is_leap_year(y) ? -1 : -2)
+			) +
+			d);
 }
 
-	day_month_year Gregorian::JDN_to_gregorian(int jd) const
+
+	day_month_year Gregorian::JDN_to_gregorian(double jd) const
 {
-	//std::cout << " $$$$ jdn: " << jd;
 
 	day_month_year result;
-	int j, y, m, d;
+	int y, m, d;
+	double j;
 
-	j = jd - 1721119 ;
-	y = (4 * j - 1) / 146097 ;
+	j = jd - 1721119 + 0.5 ;
+	y = (int)((4 * j - 1) / 146097 );
 	j = 4 * j - 1 - 146097 * y ;
-	d = j / 4 ;
+	d = (int)(j / 4) ;
 	j = (4 * d + 3) / 1461 ;
 	d = 4 * d + 3 - 1461 * j ;
 	d = (d + 4) / 4 ;
@@ -127,100 +118,8 @@ int Gregorian::gregorian_date_to_JDN(int y, int m, int d) const
 	result.day = d;
 	result.month = m;
 	result.year = y;
-	//std::cout << " year:" << y << " month:" << m << " day:" << d << "\n";
 	return result;
 }
-/*
-	day_month_year Gregorian::JDN_to_gregorian(int jd) const
-{
-	std::cout << " $$$$ jdn: " << jd;
-	day_month_year result;
-	int dqc, dcent, dquad, leapadj;
-	int day, month, year;
-	float wjd,depoch, quadricent, cent, quad,yindex, yearday;
-
-	wjd = jd + 0.5;
-	depoch = wjd - 1721425.5;
-	quadricent = floor(depoch / 146097);
-	dqc = (((int)depoch) % 146097);
-	cent = (int)(dqc / 36524);
-	dcent = (dqc %36524);
-	quad = (int)(dcent / 1461);
-	dquad = (dcent % 1461);
-	yindex = (int)(dquad / 365);
-	year = int((quadricent * 400) + (cent * 100) + (quad * 4) + yindex);
-	if (!((cent == 4) || (yindex == 4))) {
-		(year)++;
-	}
-	yearday = wjd - gregorian_date_to_JDN(year, 1, 1);
-	leapadj = ((wjd < gregorian_date_to_JDN(year, 3, 1)) ? 0
-			:
-	(is_leap_year(year) ? 1 : 2));
-	month = int(floor((((yearday + leapadj) * 12) + 373) / 367));
-	day   = int((wjd - gregorian_date_to_JDN(year, month, 1)) + 1);
-
-	result.day = day;
-	result.month = month;
-	result.year = year;
-	std::cout << " year:" << year << " month:" << month << " day:" << day << "\n";
-	return result;
-}
-*/
-/*
-	day_month_year Gregorian::JDN_to_gregorian(int jd) const
-{
-	day_month_year result;
-	float jdn, day, month, year;
-	float calc1, calc2, calc3;
-	jdn = jd - 1721119;
-    calc1 = 4 * jdn - 1;
-    year = (int)(calc1 / 146097);
-    jdn = (int)(calc1 - 146097 * year);
-    day = (int)(jdn / 4);
-    calc2 = 4 * day + 3;
-    jdn = (int)(calc2 / 1461);
-    day = calc2 - 1461 * jdn;
-    day = (int)((day + 4) / 4);
-    calc3 = 5 * day - 3;
-    month = (int)(calc3 / 153);
-    day = calc3 - 153 * month;
-    day = (int)((day + 5) / 5);
-    year = 100 * year + jdn;
-
-    if (month < 10) {
-        month = month + 3;
-    }
-    else {
-        month = month - 9;
-        year = year + 1;
-    }
-	result.day = day;
-	result.month = month;
-	result.year = year;
-	return result;
-}
-*/
-/*
-	day_month_year Gregorian::JDN_to_gregorian(int jd) const
-{
-	day_month_year result;
-	int l, n, i, d, j, m, y;
-	l = jd + 68569 + 1;
-    n = (int)(( 4 * l ) / 146097);
-    l = l - (int)(( 146097 * n + 3 ) / 4);
-    i = (int)(( 4000 * ( l + 1 ) ) / 1461001);
-    l = l - (int)(( 1461 * i ) / 4) + 31;
-    j = (int)(( 80 * l ) / 2447);
-    d = l - (int)(( 2447 * j ) / 80);
-    l = (int)(j / 11);
-    m = j + 2 - ( 12 * l );
-    y = 100 * ( n - 49 ) + i + l;
-	result.day = d;
-	result.month = m;
-	result.year = y;
-	return result;
-}
-*/
 
 	const int Gregorian::year() const
 {
@@ -340,7 +239,7 @@ void Gregorian::operator-=(int n)
 
 Gregorian& Gregorian::operator=(const Date& d)
 {
-	int jdn = d.mod_julian_day() + 2400000;
+	int jdn = d.julian_day();
 	julian_day_number = jdn;
 	return *this;
 }
@@ -428,13 +327,11 @@ Gregorian& Gregorian::operator=(const Date& d)
 		next_month++;
 	}
 
-		//std::cout << "\n$$$$ year:" << next_year << " month:" << next_month << " day:" << day() <<"\n";
 	if(days_in_month(next_year, next_month) >= day())
 	{
 		julian_day_number = gregorian_date_to_JDN(next_year, next_month, day());
 	}else
 	{
-		//std::cout << "\nFAIL\n";
 		julian_day_number += 30;
 	}
 	return (*this);
@@ -450,7 +347,7 @@ Gregorian& Gregorian::operator=(const Date& d)
 				return false;
 		else
 			return true;
-	else 
+	else
 		return false;
 }
 

@@ -9,7 +9,7 @@ public:
 	~Date(void);
 
 	virtual int mod_julian_day() const = 0;
-	virtual int julian_day() const = 0;
+	virtual double julian_day() const = 0;
 
 	const virtual int year() const = 0;
 	const virtual int month() const = 0;
@@ -45,7 +45,7 @@ public:
 
 protected:
 	//state
-	int julian_day_number;
+	double julian_day_number;
 };
 std::ostream& operator<<(std::ostream & os, const Date& d);
 

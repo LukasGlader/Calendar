@@ -1,53 +1,47 @@
 #pragma once
+#include "gregorian.h"
+#include "kattistime.h"
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <cstdlib>
 #include <math.h>
-
-namespace lab2{
+#include <iterator>
+#include <stdexcept>
+#include <iostream>
+namespace lab2
+{
 
 class Julian :
-	public Date
+	public Gregorian
 {
+
 public:
-
-	Julian(void);
-	Julian(int jdn); //JDN Constructor
-	Julian(Date*);
-	Julian(Date*&);
+	Julian();
 	Julian(const Date&);
+	Julian(int jdn);
 	Julian(int year, int month, int day);
-	~Julian(void);
+	~Julian();
 
-	const virtual int year() const;
-	const virtual int month() const;
-	const virtual int day() const;
-	const virtual int week_day() const;
+	const int day() const;
+	const int month() const;
+	const int year() const;
 
-	const int days_per_week() const;
-	const int days_this_month() const;
-	const virtual int months_per_year() const;
-
-	int days_this_month(int year, int month) const;
-
-	//Weird functions should be removed!
-	//void jdnToJulianDate(int jdn);
-	//int julianDateToJDN(int year, int month, int day);
-	//void updateDateWithJDN(int jdn);
-	
-	//prefix
-	virtual Julian& operator++();
-	virtual Julian& operator--();
-
-	Julian& operator=(const Date& d);
-
-	virtual void operator+=(int n);
-	virtual void operator-=(int n);
-
-	virtual Date& add_year(int n = 1);
-	virtual Date& add_month(int n = 1);
-
+	virtual Date& add_year(int n);
+	virtual Date& add_year();
+	virtual Date& add_month(int n);
+	virtual Date& add_month();
+	virtual Date& sub_month();
 protected:
 
-	//state
 	virtual bool is_leap_year(int year) const;
+	bool is_leap_day() const;
 
+	int days_in_month(int year, int month) const;
+	//int calculateDaysNextMonth();
+
+	//void jdnToG_Regorian(int jdn);
+	double julian_date_to_JDN(int year, int month, int day) const;
+	day_month_year JDN_to_julian(double jd) const;
 };
 }

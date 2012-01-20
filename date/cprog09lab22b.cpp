@@ -7,6 +7,7 @@
 
 #include "gregorian.h"
 #include "kattistime.h"
+#include "gregorian.h"
 #include <vector>
 #include <string>
 #include <cstdio>
@@ -74,6 +75,7 @@ namespace {
 		}
 	}
 }
+
 int main(int argc, char **argv) {
 	char buf[101];
 	while(scanf("%100s", buf) == 1) {
@@ -164,8 +166,6 @@ int main(int argc, char **argv) {
 		} else if(command == "chained") {
 			const size_t idx = read_idx_or_die();
 			try {
-
-
 				/*
 				 * Subtracts two days. The reason for doing it this very odd way
 				 * is to test that prefix and postfix increment/decrement seem to
@@ -174,7 +174,6 @@ int main(int argc, char **argv) {
 				 * I know it's ugly, but adding parenthesis or spaces doesn't really
 				 * help all that much. Sorry.
 				 */
-
 				----------++++++++--++--++--++(*dates[idx]);
 				cout << "L" << linenr<< ":D" << idx << ";" << (*dates[idx]) << endl;
 			} catch (std::out_of_range oor) {
@@ -239,9 +238,7 @@ int main(int argc, char **argv) {
 			cout << "L" << linenr << ":D" << lhs << ";" <<const_cast<const Date*>(dates[lhs])->mod_julian_day() << endl;
 		} else if(command == "set_k_time") {
 			time_t time = 0;
-
 			/* No standardized way to read time_t with scanf */
-
 			if(!(std::cin >> time))
 				assert(!"Can't read time");
 			set_k_time(time);

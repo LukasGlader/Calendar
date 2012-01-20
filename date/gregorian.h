@@ -30,7 +30,7 @@ public:
 	~Gregorian();
 
 	virtual int mod_julian_day() const;
-	virtual int julian_day() const;
+	virtual double julian_day() const;
 
 	const virtual int year() const;
 	const virtual int month() const;
@@ -70,7 +70,8 @@ protected:
 	//int calculateDaysNextMonth();
 
 	//void jdnToG_Regorian(int jdn);
-	int gregorian_date_to_JDN(int year, int month, int day) const;
+	double gregorian_date_to_JDN(int year, int month, int day) const;
+	double JDN_to_mod_julian_day(double jdn) const;
 
 	static const std::string day_names[8];
 	static const std::string month_names[13];
@@ -80,6 +81,6 @@ protected:
 	static const int months_in_year = 12;
 
 	void is_valid(int d, int m, int y) const;
-	day_month_year JDN_to_gregorian(int jd) const;
+	day_month_year JDN_to_gregorian(double jd) const;
 };
 }
