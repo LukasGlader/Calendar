@@ -2,12 +2,8 @@
 
 namespace lab2{
 
-Julian::Julian()
+Julian::Julian():Gregorian()
 {
-
-	time_t t;
-	k_time(&t);	//time(t);
-	julian_day_number = (t/86400)+ 2440587.5;
 }
 
 Julian::Julian(const Date& d)
