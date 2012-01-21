@@ -1,4 +1,6 @@
 #include "julian.h"
+#define IGREG (15+31L*(10+12L*1582))
+
 
 namespace lab2{
 
@@ -19,42 +21,48 @@ Julian::Julian(int jdn)
 Julian::Julian(int year, int month, int day)
 {
 	is_valid(day, month, year);
-	julian_day_number = gregorian_date_to_JDN(year, month, day);
+	julian_day_number = julian_date_to_JDN(year, month, day);
 }
 
 	Julian::~Julian()
 {
 }
 
-double Julian::julian_date_to_JDN(int y, int m, int d) const
+double Julian::julian_date_to_JDN(int year, int month, int day) const
 {
-	if(y < 1 ){
-		y++;
-	}
-	if( m <= 2 ){
-		y--;
-		m += 12;
-	}
-	return ((floor((365.25)*(y+4716)) +
-			floor(30.6001*(m+1))+d)-1524.5);
+	//std::cout << "Julian->JDN date: " << year <<"-"<<month<<"-"<<day<<" ->";
 
+	if(year < 1 ){
+		year++;
+	}
+	if( month <= 2 ){
+		year--;
+		month += 12;
+	}
+	double jdn = ((floor(365.25*(year+4716)) +
+			floor(30.6001*(month+1))+day)-1524.5);
+	//std::cout << (int)jdn << "\n";
+	return jdn;
 }
 
-	day_month_year Julian::JDN_to_julian(double jd) const
+	day_month_year Julian::JDN_to_julian(double julian) const
 {
+	//std::cout << "\tJDN->Julian JDN: " << (int)julian << " -> ";
 	day_month_year result;
+	int day, month, year;
 
-	int b = mod_julian_day() + 2401525;
+	int b = JDN_to_mod_julian_day(julian) + 2401525;
 	int c = (int)((b - 122.1) / 365.25);
 	int da = (int)(365.25 * c);
 	int e = (int)((b - da) / 30.6001);
-	int m =(int)( (e < 14) ? (e - 1) : (e - 13) );
-	int y = (int)( (m > 2 ) ? (c - 4716) : (c - 4715));
-	int d = (int)(b-da-floor(30.6001*e));
+	month =(int)( (e < 14) ? (e - 1) : (e - 13) );
+	year = (int)( (month > 2 ) ? (c - 4716) : (c - 4715));
+	day = (int)(b-da-floor(30.6001*e));
 
-	result.day = d;
-	result.month = m;
-	result.year = y;
+	//std::cout << year <<"-"<<month<<"-"<<day<<"\n";
+	result.day = day;
+	result.month = month;
+	result.year = year;
 	return result;
 }
 
@@ -148,6 +156,27 @@ double Julian::julian_date_to_JDN(int y, int m, int d) const
 	bool Julian::is_leap_year(int year) const
 {
 	return (year % 4 == 0);
+}
+
+const int Julian::week_day()const{
+	// Julian
+	int m = month();
+	int y = year();
+	if (m < 3){
+		m += 12;
+		y -=1;
+	}
+	int k = y % 100;
+	int j = y /100;
+	int h = ((day() + (int)(((m+1)*26)/10) + k + (int)(k/4) + 5 + (6*j))) % 7;
+	h -= 1;
+	if(h == 0){
+		h = 7;
+	}
+	if(h == -1){
+		h = 6;
+	}
+	return h;
 }
 
 }

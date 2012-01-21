@@ -37,8 +37,8 @@ protected:
 
 	//int calculateDaysNextMonth();
 
-	//void jdnToG_Regorian(int jdn);
 	double julian_date_to_JDN(int year, int month, int day) const;
 	day_month_year JDN_to_julian(double jd) const;
+	const virtual int week_day() const;
 };
 }

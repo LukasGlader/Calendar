@@ -17,22 +17,30 @@ int main(){
 
 	time_t time = 0;
 	set_k_time(time);
-	Julian g = Julian(2009, 2, 24);
-	//Julian j = Julian(2009, 2, 24);
+	Julian j = Julian(1923, 1, 1);
 	std::cout << "--------------------------------------------------------------------------------\n";
-	std::cout << "Test 1 - Date: 2009-2-24: Tuesday\n";
+	std::cout << "Test 1 - Date: 1923-01-01: \n";
 	std::cout << "\n";
 
-	std::cout << "Gregor - Date: " << g.year() << "-" << g.month() << "-" << g.day()  << ": " << g.week_day_name() << std::endl;
-	std::cout << "Actual    JDN: " << g.mod_julian_day() << std::endl;
-	std::cout << "Expected  JDN: " << "54886" << std::endl;
+	std::cout << "Gregor - Date: " << j.year() << "-" << j.month() << "-" << j.day()  << ": " << j.week_day_name() << std::endl;
+	std::cout << "Actual    JDN: " << j.mod_julian_day() << std::endl;
+	std::cout << "Expected  JDN: " << "23433" << std::endl;
+	std::cout << "\n";
+
+	j = Julian(2014, 5, 22);
+	std::cout << "--------------------------------------------------------------------------------\n";
+	std::cout << "Test 1 - Date: 2014-05-22: \n";
+	std::cout << "\n";
+
+	std::cout << "Gregor - Date: " << j.year() << "-" << j.month() << "-" << j.day()  << ": " << j.week_day_name() << std::endl;
+	std::cout << "Actual    JDN: " << (int)j.julian_day() << std::endl;
+	std::cout << "Expected  JDN: " << "56812" << std::endl;
 	std::cout << "\n";
 /*
 	std::cout << "Julian - Date: " << j.year() << "-" << j.month() << "-" << j.day()  << ": " << j.week_day_name() << std::endl;
 	std::cout << "Actual    JDN: " << j.mod_julian_day() << std::endl;
 	std::cout << "Expected  JDN: " << "54899" << std::endl;
 	std::cout << "\n\n";
-*/
 	g = Julian(1970, 1, 17);
 //	j = Julian(1970, 1, 17);
 	std::cout << "--------------------------------------------------------------------------------\n";
@@ -43,12 +51,10 @@ int main(){
 	std::cout << "Actual    JDN: " << g.mod_julian_day() << std::endl;
 	std::cout << "Expected  JDN: " << "40603" << std::endl;
 	std::cout << "\n";
-/*
 	//std::cout << "Julian - Date: " << j.year() << "-" << j.month() << "-" << j.day()  << ": " << j.week_day_name() << std::endl;
 	std::cout << "Actual    JDN: " << j.mod_julian_day() << std::endl;
 	std::cout << "Expected  JDN: " << "40616" << std::endl;
 	std::cout << "\n\n";
-*/
 	g = Julian();
 //	j = Julian();
 	std::cout << "--------------------------------------------------------------------------------\n";
@@ -58,11 +64,10 @@ int main(){
 	std::cout << "Gregor - Date: " << g.year() << "-" << g.month() << "-" << g.day()  << ": " << g.week_day_name() << std::endl;
 	std::cout << "          JDN: " << g.mod_julian_day() << std::endl;
 	std::cout << "\n";
-/*
 	std::cout << "Julian - Date: " << j.year() << "-" << j.month() << "-" << j.day()  << ": " << j.week_day_name() << std::endl;
 	std::cout << "          JDN: " << j.mod_julian_day() << std::endl;
 	std::cout << "\n\n";
-	*/
+
 	std::cout << "--------------------------------------------------------------------------------\n";
 	std::cout << "--------------------------------------------------------------------------------\n";
 	std::cout << "--------------------------------------------------------------------------------\n";
@@ -178,5 +183,6 @@ int main(){
 	std::cout << "Gregor - Date: " << g << ": " << g.week_day_name() << std::endl;
 	std::cout << "Actual    JDN: " << g.mod_julian_day() << std::endl;
 	std::cout << "\n";
+	*/
 	return 0;
 }
